@@ -1,7 +1,15 @@
 var canvas, ctx, pacman = [], isPaused=false, score=0, tick=0, food, headfwd, currentheadfwd, WIDTH=20;
 
 canvas = document.getElementById('myCanvas');
-
+window.requestAnimFrame =
+    window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback) {
+        window.setTimeout(callback, 1000);
+};
 
 function init() {
   if(canvas.getContext && canvas.getContext('2d')) {
