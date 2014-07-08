@@ -1,27 +1,45 @@
-var canvas, ctx, pacman = [], isPaused=false, score=0, tick=0, food, headfwd, currentheadfwd, WIDTH=20;
+var canvas, ctx, pacman = [], isPaused=false, score=0, tick=0, food, headfwd, currentheadfwd, WIDTH=20, requestId;
+
 
 canvas = document.getElementById('myCanvas');
-window.requestAnimFrame =
-    window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function (callback) {
-        window.setTimeout(callback, 1000);
-};
+
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
 
 function init() {
   if(canvas.getContext && canvas.getContext('2d')) {
-      context = canvas.getContext('2d'); 	//context
-      canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-          canvas.style.position = 'absolute';
-          canvas.style.top = 0;
-          canvas.style.bottom = 0;
-          canvas.style.left = 0;
-          canvas.style.right = 0;
-          canvas.style.zIndex = -1;
+    context = canvas.getContext('2d'); 	//context
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.position = 'absolute';
+    canvas.style.top = 0;
+    canvas.style.bottom = 0;
+    canvas.style.left = 0;
+    canvas.style.right = 0;
+    canvas.style.zIndex = -1;
   }
   else {
     // text
@@ -74,14 +92,21 @@ function get_browser_version(){
 
 function update(){
   reset();
-  
+
   if (!isPaused){
   }
-  window.setTimeout(requestAnimFrame(update),1000); 
+  window.requestAnimationFrame(function(/* time */ time){
+    // time ~= +new Date // the unix time
+  });
 }
 
 function reset() {
   canvas.width = canvas.width;
+}
+function stop() {
+	if (requestId)
+	window.cancelAnimationFrame(requestId);
+	requestId = 0;
 }
 
 window.onload = function () {  
