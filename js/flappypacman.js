@@ -41,7 +41,7 @@ function init() {
     canvas.style.right = 0;
     canvas.style.zIndex = -1;
   }
-  else {
+  else {/**
     // text
     var text = document.createElement("div");
     text.innerHTML = "This game can't play on browser:";
@@ -66,7 +66,7 @@ function init() {
     var text3 = document.createElement("div");
     text3.innerHTML = "=( sorry";
     text3.setAttribute('class', 'text'); 
-    document.getElementById("container").appendChild(text3);
+    document.getElementById("container").appendChild(text3);**/
   }
 }
 
@@ -89,19 +89,54 @@ function get_browser_version(){
   M=M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
   return M[1];
 }
+//create the particles
+
+var ps = [];
+var MAX_NUM = 500;
+var colors = [ '#69D2E7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900', '#FF4E50', '#F9D423' ];
+
+function spawn() {
+  for(var i=0; ps.length < MAX_NUM; i++) {
+    ps[i] = { x: Math.random()*window.innerWidth,
+              y: Math.random()*window.innerHeight,
+              r: Math.random()*5,
+              c: colors[Math.floor(Math.random()*colors.length)]
+            };                  
+   }
+}
 
 function update(){
   reset();
+  
+  for(var i=0; i<ps.length; i++) {
+    ctx.beginPath();
+		ctx.arc( ps[i].x, ps[i].y, ps[i].r, 0, 6);
+		ctx.fillStyle = ps[i].c;
+		ctx.fill(); 
+  }
 
   if (!isPaused){
   }
-  window.requestAnimationFrame(function(/* time */ time){
-    // time ~= +new Date // the unix time
+  window.requestAnimationFrame(update()){
+    time = +new Date // the unix time
   });
 }
 
 function reset() {
   canvas.width = canvas.width;
+    //reset the x and y coordinates if leaves the canvas
+    for(var i=0; i<ps.length; i++) {
+        //reset if y or coordinate has left the canvas
+        if(ps[i].y > c.height) {
+            ps[i].y = Math.random()*window.innerHeight;
+            ps[i].color = colors[Math.floor(Math.random() * colors.length)];
+        }
+        //reset if x or coordinate has left the canvas
+        if(ps[i].x > c.width || ps[i].x < 0){
+          ps[i].x = Math.random()*window.innerWidth;
+          ps[i].color = colors[Math.floor(Math.random() * colors.length)];
+        }
+	}
 }
 function stop() {
 	if (requestId)
@@ -113,4 +148,5 @@ window.onload = function () {
   canvas.width = canvas.width;
   canvas.height = canvas.height;
   init();
+  spawn();
 };
