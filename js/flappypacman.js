@@ -3,7 +3,7 @@ var canvas, ctx, pacman = [], isPaused=false, score=0, tick=0, food, headfwd, cu
 
 canvas = document.getElementById('myCanvas');
 
-(function() {
+/**(function() {
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -26,7 +26,7 @@ canvas = document.getElementById('myCanvas');
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
-}());
+}());**/
 
 
 function init() {
@@ -74,7 +74,7 @@ function game_start() {
 }
 
 /** Find out the browser version and  name by **/
-function get_browser(){
+/**function get_browser(){
   var N=navigator.appName, ua=navigator.userAgent, tem;
   var M=ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
   if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
@@ -88,7 +88,7 @@ function get_browser_version(){
   if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
   M=M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
   return M[1];
-}
+}**/
 //create the particles
 
 var ps = [];
@@ -116,10 +116,8 @@ function update(){
   }
 
   if (!isPaused){
+      window.requestAnimationFrame(update);
   }
-  window.requestAnimationFrame(update()){
-    time = +new Date // the unix time
-  });
 }
 
 function reset() {
