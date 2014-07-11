@@ -122,8 +122,8 @@ function get_browser_version(){
 }
 
 function update(){
-  requestAnimationFrame(update);
-
+  //requestAnimationFrame(update);
+	window.setTimeout(requestAnimationFrame(update), 70)
   reset();
     
   for(var i=0; i<ps.length; i++) {
@@ -149,8 +149,12 @@ function reset() {
           ps[i].x = Math.random()*window.innerWidth;
           ps[i].color = colors[Math.floor(Math.random() * colors.length)];
         }
-	}
+    }
 }
+(function animloop(){
+  requestAnimationFrame(animloop);
+  update();
+})();
 
 window.onload = function () {  
   console.log("--- on load -----")
