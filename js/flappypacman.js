@@ -1,25 +1,15 @@
 var canvas, ctx, pacman = [], isPaused=false, score=0, tick=0, food, headfwd, currentheadfwd, WIDTH=20, requestId;
+var fps = 90;
+var now;
+var then = Date.now();
+var interval = 1000/fps;
+var delta;
+var pacman;
+
 
 
 canvas = document.getElementById('myCanvas');
 
-//create the particles
-
-var ps = [];
-var MAX_NUM = 500;
-var colors = [ '#69D2E7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900', '#FF4E50', '#F9D423' ];
-
-function spawn() {
-  console.log("|-----spawm()")
-  for(var i=0; ps.length < MAX_NUM; i++) {
-    ps[i] = { x: Math.random()*window.innerWidth,
-              y: Math.random()*window.innerHeight,
-              r: Math.random()*5,
-              c: colors[Math.floor(Math.random()*colors.length)]
-            };                  
-   }
-  update();
-}
 
 
 
@@ -71,7 +61,7 @@ function init() {
     canvas.style.right = 0;
     canvas.style.zIndex = -1;
   }
-  else {/**
+  else {
     // text
     var text = document.createElement("div");
     text.innerHTML = "This game can't play on browser:";
@@ -96,12 +86,29 @@ function init() {
     var text3 = document.createElement("div");
     text3.innerHTML = "=( sorry";
     text3.setAttribute('class', 'text'); 
-    document.getElementById("container").appendChild(text3);**/
+    document.getElementById("container").appendChild(text3);
   }
-  spawn();
+  init_pacman();
 }
 
-function game_start() {
+function init_pacman() {
+    console.log("|----init_pacman()")
+	var rad = 50;
+	pacman = {  x: Math.random()*canvas.width - rad,
+              y: Math.random()*canvas.height - rad,
+              r: rad,
+              c: "#FFC300",
+            };
+  draw_pacman();
+}
+
+
+function draw_pacman() {
+  context.beginPath();
+  context.arc(pacman.x, pacman.y, pacman.r, 0, Math.PI*2);
+  context.fillStyle = pacman.c;
+  context.fill(); 
+  context.closePath();
 }
 
 /** Find out the browser version and  name by **/
@@ -122,17 +129,23 @@ function get_browser_version(){
 }
 
 function update(){
-  //requestAnimationFrame(update);
-	window.setTimeout(requestAnimationFrame(update), 70)
+  requestAnimationFrame(update);
+	//window.setTimeout(requestAnimationFrame(update), 11)//
   reset();
-    
-  for(var i=0; i<ps.length; i++) {
+  now = Date.now();
+  delta = now - then;
+  console.log("--- update -----");
+
+  if (delta > interval) {  
+    // do game calculation/updates and so on
     context.beginPath();
-		context.arc( ps[i].x, ps[i].y, ps[i].r, 0, 6);
+		context.arc( pacman.x, pacman.y, pacman.r, 0, 6);
 		context.fillStyle = ps[i].c;
 		context.fill(); 
+  
+    then = now - (delta % interval);
   }
-
+  
 }
 
 function reset() {
@@ -149,11 +162,12 @@ function reset() {
           ps[i].x = Math.random()*window.innerWidth;
           ps[i].color = colors[Math.floor(Math.random() * colors.length)];
         }
-    }
+	}
 }
 (function animloop(){
-  requestAnimationFrame(animloop);
-  update();
+  console.log("--- animloop -----")
+  //requestAnimationFrame(animloop);
+  //update();
 })();
 
 window.onload = function () {  
