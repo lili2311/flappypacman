@@ -10,9 +10,6 @@ var pacman;
 
 canvas = document.getElementById('myCanvas');
 
-
-
-
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
  
@@ -52,14 +49,14 @@ function init() {
     console.log("|-----init:getContext")
 
     context = canvas.getContext('2d'); 	//context
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.position = 'absolute';
+    canvas.width = 600;
+    canvas.height = 400;
     canvas.style.top = 0;
     canvas.style.bottom = 0;
     canvas.style.left = 0;
     canvas.style.right = 0;
     canvas.style.zIndex = -1;
+    window.addEventListener('keydown', key_down, true);
   }
   else {
     // text
@@ -141,13 +138,44 @@ function update(){
     context.beginPath();
 		context.arc( pacman.x, pacman.y, pacman.r, 0, 6);
 		context.fillStyle = ps[i].c;
-		context.fill(); 
-  
+		context.fill();   
     then = now - (delta % interval);
+  }
+}
+
+function key_down(e) {
+  // SPACE BAR
+  if(e.keyCode == 13) {
+    isPaused = !isPaused;
+  }
+
+  // LEFT KEY
+  if(e.keyCode == 37 && !isPaused) {
+    pacman.x = -10;
+    pacman.y = 0;
+    //console.info('LEFT'); 
+  }
+  // RIGHT KEY
+  else if(e.keyCode == 39 && !isPaused) {
+    pacman.x = 10;
+    pacman.y = 0;
+   // console.info('RIGHT'); 
+  }
+  // UP KEY
+  else if(e.keyCode == 38 && !isPaused) {
+    pacman.y = -10;
+    pacman.x = 0;
+    //console.info('UP');   
+  }
+  //DOWN KEY
+  else if(e.keyCode == 40 && !isPaused){
+    pacman.y = 10;
+    pacman.x = 0;
+    //console.info('DOWN'); 
+
   }
   
 }
-
 function reset() {
   canvas.width = canvas.width;
     //reset the x and y coordinates if leaves the canvas
