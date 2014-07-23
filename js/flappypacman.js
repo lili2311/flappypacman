@@ -7,7 +7,6 @@ var delta;
 var pacman;
 
 
-
 canvas = document.getElementById('myCanvas');
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -90,12 +89,14 @@ function init() {
 
 function init_pacman() {
     console.log("|----init_pacman()")
-	var rad = 50;
-	pacman = {  x: Math.random()*canvas.width - rad,
-              y: Math.random()*canvas.height - rad,
-              r: rad,
-              c: "#FFC300",
+	var rad = 20;
+	pacman = {  
+    		x:rad*Math.floor(Math.random()*canvas.width/(rad*2)),
+      	 	y: rad*Math.floor(Math.random()*canvas.height/(rad*2)),
+         r: rad,
+         c: "#FFC300",
             };
+  console.log("x:"+pacman.x+", y:"+pacman.y)
   draw_pacman();
 }
 
