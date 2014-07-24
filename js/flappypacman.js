@@ -5,6 +5,7 @@ var then = Date.now();
 var interval = 1000/fps;
 var delta;
 var pacman;
+var animID=0;
 
 
 canvas = document.getElementById('myCanvas');
@@ -56,6 +57,8 @@ function init() {
     canvas.style.right = 0;
     canvas.style.zIndex = -1;
     window.addEventListener('keydown', key_down, true);
+    window.addEventListener('keyup', key_up, true);
+
   }
   else {
     // text
@@ -138,10 +141,14 @@ function update(){
     // do game calculation/updates and so on
     context.beginPath();
 		context.arc( pacman.x, pacman.y, pacman.r, 0, 6);
-		context.fillStyle = ps[i].c;
+		context.fillStyle = pacman.c;
 		context.fill();   
     then = now - (delta % interval);
   }
+}
+
+function key_up(e) {
+  //cancelAnimationFrame(animID);
 }
 
 function key_down(e) {
@@ -152,46 +159,28 @@ function key_down(e) {
 
   // LEFT KEY
   if(e.keyCode == 37 && !isPaused) {
-    pacman.x = -10;
-    pacman.y = 0;
-    //console.info('LEFT'); 
+    pacman.x -= 10;
+    console.info('LEFT'); 
   }
   // RIGHT KEY
   else if(e.keyCode == 39 && !isPaused) {
-    pacman.x = 10;
-    pacman.y = 0;
-   // console.info('RIGHT'); 
+    pacman.x += 10;
+    console.info('RIGHT'); 
   }
   // UP KEY
   else if(e.keyCode == 38 && !isPaused) {
-    pacman.y = -10;
-    pacman.x = 0;
-    //console.info('UP');   
+    pacman.y += 10;
+    console.info('UP');   
   }
   //DOWN KEY
   else if(e.keyCode == 40 && !isPaused){
-    pacman.y = 10;
-    pacman.x = 0;
-    //console.info('DOWN'); 
-
+    pacman.y += 10;
+    console.info('DOWN'); 
   }
   
 }
 function reset() {
   canvas.width = canvas.width;
-    //reset the x and y coordinates if leaves the canvas
-    for(var i=0; i<ps.length; i++) {
-        //reset if y or coordinate has left the canvas
-        if(ps[i].y > canvas.height) {
-            ps[i].y = Math.random()*window.innerHeight;
-            ps[i].color = colors[Math.floor(Math.random() * colors.length)];
-        }
-        //reset if x or coordinate has left the canvas
-        if(ps[i].x > canvas.width || ps[i].x < 0){
-          ps[i].x = Math.random()*window.innerWidth;
-          ps[i].color = colors[Math.floor(Math.random() * colors.length)];
-        }
-	}
 }
 (function animloop(){
   console.log("--- animloop -----")
